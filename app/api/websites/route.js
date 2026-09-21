@@ -4,6 +4,26 @@ import { generateApiKey, getApiKeyPrefix, hashApiKey } from "../../../lib/keys";
 import { getSupabaseAdmin } from "../../../lib/supabase/admin";
 import { websiteSchema } from "../../../lib/validation/schemas";
 
+export async function GET() {
+  const auth = await requireApiAdmin();
+
+  if (auth.response) {
+    return auth.response;
+  }
+
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from("websites")
+    .select("id, name, domain, content_version, api_key_prefix, created_at")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    return jsonError("Websites could not be loaded.", 400, error.message);
+  }
+
+  return jsonOk({ websites: data || [] });
+}
+
 export async function POST(request) {
   const auth = await requireApiAdmin();
 

@@ -93,8 +93,8 @@ Authorization: Bearer cms_your_key_here`}</Code>
             Select returns the selected string. Repeater returns an array of row objects.
           </Text>
           <Text c="var(--cms-secondary)">
-            Responses include `Cache-Control: public, s-maxage=60, stale-while-revalidate=300`
-            and an ETag that changes when content or structure is saved.
+            Responses are sent with `Cache-Control: private, no-store` so no CDN ever shares one site's content with another key,
+            with an ETag that changes when content or structure is saved. Cache the content in your own site instead (the connected sites use 60 seconds).
           </Text>
         </Stack>
       </Paper>
